@@ -22,5 +22,4 @@ async def add_content(req: ContentReq):
 @router.get("/content/list")
 async def list_content():
     repo = ContentRepository()
-    result = await repo.get_all_content()
-    return result
+    return await repo.get_all_content()

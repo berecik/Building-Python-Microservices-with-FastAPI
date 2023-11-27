@@ -9,7 +9,7 @@ import os
 def json_serial(obj):
     if isinstance(obj, (datetime, date)):
         return obj.strftime('%Y-%m-%dT%H:%M:%S.%f')
-    raise TypeError ("The type %s not serializable." % type(obj))
+    raise TypeError(f"The type {type(obj)} not serializable.")
   
 class ProfileQuery(ObjectType):
     profile_list = None
@@ -36,17 +36,14 @@ class CreateProfileData(Mutation):
     ok = Boolean()
     profileData = Field(lambda: ProfileData)
 
-    async def mutate(root, info, id, fname, lname, age, position, login_id, official_id, date_employed):
+    async def mutate(self, info, id, fname, lname, age, position, login_id, official_id, date_employed):
         
         profile_dict = {"id": id, "fname": fname, "lname": lname, "age": age, "position": position,
                       "login_id": login_id, "official_id": official_id, "date_employed": date_employed}
         profile_json = dumps(profile_dict, default=json_serial)
         repo = ProfileRepository()
         result = await repo.add_profile(loads(profile_json))
-        if not result == None:
-          ok = True
-        else: 
-          ok = False
+        ok = result is not None
         return CreateProfileData(profileData=result, ok=ok)
 
 

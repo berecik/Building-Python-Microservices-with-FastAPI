@@ -10,5 +10,4 @@ class UpdateTrainerCommandHandler(ICommandHandler):
         self.repo:TrainerRepository = TrainerRepository()
         
     async def handle(self, command:ProfileTrainerCommand) -> bool:
-        result = await self.repo.update_trainer(command.details)
-        return result
+        return await self.repo.update_trainer(command.details)

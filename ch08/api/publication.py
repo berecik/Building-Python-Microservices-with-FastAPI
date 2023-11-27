@@ -25,5 +25,4 @@ async def add_publication(req: PublicationReq):
 @router.get("/publication/list")
 async def list_publication():
     repo = PublicationRepository()
-    result = await repo.get_all_publication()
-    return result
+    return await repo.get_all_publication()

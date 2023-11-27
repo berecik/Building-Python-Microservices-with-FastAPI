@@ -40,22 +40,22 @@ class BillingAdminRepository:
         
     async def join_billing_admin(self):
         query = Billing.join(Admin).select()
-        result = await query.gino.load(Billing.distinct(Billing.id).load(parent=Admin)).all()
-        return result 
+        return await query.gino.load(
+            Billing.distinct(Billing.id).load(parent=Admin)
+        ).all() 
     
     async def join_admin_billing(self):
 
-        result = await Admin.load(add_child=Billing).query.gino.all()
-        return result   
+        return await Admin.load(add_child=Billing).query.gino.all()   
 
 class BillingVendorRepository:
     
     async def join_billing_vendor(self):
         query = Billing.join(Vendor).select()
-        result = await query.gino.load(Billing.distinct(Billing.id).load(parent=Vendor)).all()
-        return result 
+        return await query.gino.load(
+            Billing.distinct(Billing.id).load(parent=Vendor)
+        ).all() 
     
     async def join_vendor_billing(self):
-        result = await Vendor.load(add_child=Billing).query.gino.all()
-        return result 
+        return await Vendor.load(add_child=Billing).query.gino.all() 
     

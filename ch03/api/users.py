@@ -19,12 +19,18 @@ class LoginReq(BaseModel):
 router = APIRouter(dependencies=[Depends(count_user_by_type), Depends(check_credential_error)])
 
 def create_login(id:UUID, username: str, password:str, type: UserType):
-    account = {"id": id, "username": username, "password": password, "type": type}
-    return account
+    return {"id": id, "username": username, "password": password, "type": type}
 
 async def create_user_details(id: UUID, firstname: str, lastname: str, middle: str, bday: date, pos: str, login=Depends(create_login),):
-    user = {"id": id, "firstname": firstname, "lastname": lastname, "middle": middle, "bday": bday, "pos": pos, "login": login}
-    return user
+    return {
+        "id": id,
+        "firstname": firstname,
+        "lastname": lastname,
+        "middle": middle,
+        "bday": bday,
+        "pos": pos,
+        "login": login,
+    }
 
 @router.get("/users/function/add")
 def populate_user_accounts(user_account:Login=Depends(create_login)):

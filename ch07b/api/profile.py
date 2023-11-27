@@ -34,31 +34,27 @@ def add_profile(req: ProfileReq, sess:Session = Depends(sess_db)):
 def update_profile(id:int, req: ProfileReq, sess:Session = Depends(sess_db)): 
     profile_dict = req.dict(exclude_unset=True)
     repo:ProfileRepository = ProfileRepository(sess)
-    result = repo.update_profile(id, profile_dict )
-    if result: 
+    if result := repo.update_profile(id, profile_dict):
         return JSONResponse(content={'message':'profile updated successfully'}, status_code=201)
-    else: 
+    else:
         return JSONResponse(content={'message':'update profile error'}, status_code=500)
 
 
 @router.delete("/profile/delete/{id}", dependencies=[Depends(authenticate)])
 def delete_profile(id:int,  sess:Session = Depends(sess_db) ): 
     repo:ProfileRepository = ProfileRepository(sess)
-    result = repo.delete_profile(id )
-    if result: 
+    if result := repo.delete_profile(id):
         return JSONResponse(content={'message':'signup updated successfully'}, status_code=201)
-    else: 
+    else:
         return JSONResponse(content={'message':'update signup error'}, status_code=500)
 
 
 @router.get("/profile/list", dependencies=[Depends(authenticate)])
 def list_all_profile(sess:Session = Depends(sess_db) ): 
     repo:ProfileRepository = ProfileRepository(sess)
-    result = repo.get_all_profile()
-    return result
+    return repo.get_all_profile()
 
 @router.get("/profile/{id}", dependencies=[Depends(authenticate)])
 def get_profile(id:int,  sess:Session = Depends(sess_db) ): 
     repo:ProfileRepository = ProfileRepository(sess)
-    result = repo.get_profile(id)
-    return result
+    return repo.get_profile(id)

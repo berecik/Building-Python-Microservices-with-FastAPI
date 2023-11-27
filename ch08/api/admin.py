@@ -27,8 +27,7 @@ async def add_admin(req: AdminReq):
 @router.post("/admin/login/list")
 async def list_admin_login():
     repo = AdminLoginRepository()
-    result = await repo.join_login_admin()
-    return result
+    return await repo.join_login_admin()
 
 @router.get("/admin/billing/all")
 async def list_admin_with_billing():

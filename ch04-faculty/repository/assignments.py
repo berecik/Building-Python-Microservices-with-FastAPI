@@ -54,13 +54,16 @@ class AssignmentSubmissionRepository:
         return True 
     
     def delete_submission(self, bin_id:int, assignment:Assignment ): 
-        find_assignment = [work for work in student_bin_tbl[bin_id].assignment if work.assgn_id==assignment.assgn_id] 
-        if len(find_assignment) == 0: 
-            return False 
-        else: 
+        if find_assignment := [
+            work
+            for work in student_bin_tbl[bin_id].assignment
+            if work.assgn_id == assignment.assgn_id
+        ]:
             assignment = find_assignment[0]
             student_bin_tbl[bin_id].assignment.remove(assignment)
             return True
+        else:
+            return False
         
     def get_submissions(self, bin_id:int): 
         return student_bin_tbl[bin_id]

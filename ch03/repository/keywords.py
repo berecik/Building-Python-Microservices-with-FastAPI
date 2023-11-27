@@ -13,14 +13,9 @@ class KeywordRepository:
         keywords_recipe[id] = keywords
         
     def add_keywords(self, id:UUID, keyword:str): 
-        if keywords_recipe.get(id) == None:
-            keywords = list()
-            keywords.append(keyword)
-            keywords_recipe[id] = keywords
-        else:
-            keywords = keywords_recipe[id]
-            keywords.append(keyword)
-            keywords_recipe[id] = keywords
+        keywords = [] if keywords_recipe.get(id) is None else keywords_recipe[id]
+        keywords.append(keyword)
+        keywords_recipe[id] = keywords
         
         
         

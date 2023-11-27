@@ -8,16 +8,13 @@ class FacultyService:
         self.repo:FacultyRepository = FacultyRepository()
         
     def add_faculty(self, faculty:Faculty): 
-        result = self.repo.insert_faculty(faculty)
-        return result
+        return self.repo.insert_faculty(faculty)
     
     def update_faculty(self, faculty_id:int, details:Dict[str, Any]): 
-        result = self.repo.update_faculty(faculty_id, details )
-        return result 
+        return self.repo.update_faculty(faculty_id, details ) 
     
     def remove_faculty(self, faculty_id:int): 
-        result = self.repo.delete_faculty(faculty_id)
-        return result 
+        return self.repo.delete_faculty(faculty_id) 
     
     def list_faculty(self): 
         return self.repo.get_all_faculty()

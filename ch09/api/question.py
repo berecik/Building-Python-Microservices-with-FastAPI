@@ -18,9 +18,7 @@ router = APIRouter()
 
 class MyJSONEncoder(JSONEncoder):
     def default(self, o):
-        if isinstance(o, ObjectId):
-            return str(o)
-        return JSONEncoder.default(self, o)
+        return str(o) if isinstance(o, ObjectId) else JSONEncoder.default(self, o)
 
 @router.post("/question/add")
 async def add_question(req:QuestionReq, engine=Depends(create_db_engine), user: str = Depends(get_current_user)):

@@ -29,10 +29,7 @@ class StudentLoginRepository:
     
     def get_login(self, username:str): 
         list_login = [account for account in stud_login_tbl.values() if account.username == username]
-        if not len(list_login) == 0: 
-            return list_login[0]
-        else: 
-            return None
+        return list_login[0] if list_login else None
         
     def get_all_login(self) : 
         return stud_login_tbl

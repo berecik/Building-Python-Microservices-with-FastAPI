@@ -14,16 +14,16 @@ class BuyerRepository:
     
     def insert_buyer(self, users, details:Dict[str, Any]) -> bool: 
         try:
-           user = users.find_one({"_id": details["user_id"]})
-           print(user)
-           if user == None:
-               return False
-           else: 
-               self.buyers.insert_one(details)
-                  
+            user = users.find_one({"_id": details["user_id"]})
+            print(user)
+            if user is None:
+                return False
+            else: 
+                self.buyers.insert_one(details)
+
         except Exception as e:
             print(e)
-            return False 
+            return False
         return True
     
     def add_purchase_history(self, id:int, details:Dict[str, Any]): 
@@ -76,9 +76,8 @@ class BuyerRepository:
         return True
     
     def get_all_buyer(self):
-    
-        buyers = [asdict(Buyer(**json.loads(dumps(b)))) for b in self.buyers.find()]
-        return buyers
+
+        return [asdict(Buyer(**json.loads(dumps(b)))) for b in self.buyers.find()]
     
     def get_buyer(self, id:int): 
         buyer = self.buyers.find_one({"buyer_id": id})

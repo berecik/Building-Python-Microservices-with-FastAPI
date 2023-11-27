@@ -39,11 +39,11 @@ class SalesRepository:
 class SalesPublicationRepository:
     async def join_sales_publication(self):
         query = Sales.join(Publication).select()
-        result = await query.gino.load(Sales.distinct(Sales.id).load(parent=Publication)).all()
-        return result 
+        return await query.gino.load(
+            Sales.distinct(Sales.id).load(parent=Publication)
+        ).all() 
     
     async def join_publication_sales(self):
-        result = await Publication.load(add_child=Sales).query.gino.all()
-        return result 
+        return await Publication.load(add_child=Sales).query.gino.all() 
     
     

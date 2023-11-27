@@ -23,8 +23,7 @@ templates = Jinja2Templates(directory="templates")
 
 @router.post("/upload/csv")
 async def upload(file: UploadFile = File(...)):
-    df = pd.read_csv(StringIO(str(file.file.read(), 'utf-8')), encoding='utf-16')
-    return df
+    return pd.read_csv(StringIO(str(file.file.read(), 'utf-8')), encoding='utf-16')
 
 
 @router.get("/respondents/xlsx", response_description='xlsx')
@@ -40,15 +39,13 @@ async def create_respondent_report():
     worksheet.write(0, 3, 'Age')
     worksheet.write(0, 4, 'Gender')
     worksheet.write(0, 5, 'Married?')
-    row = 1
-    for respondent in result:
+    for row, respondent in enumerate(result, start=1):
         worksheet.write(row, 0, respondent["id"])
         worksheet.write(row, 1, respondent["fname"])
         worksheet.write(row, 2, respondent["lname"])
         worksheet.write(row, 3, respondent["age"])
         worksheet.write(row, 4, respondent["gender"])
         worksheet.write(row, 5, respondent["marital"])
-        row += 1
     workbook.close()
     output.seek(0)
 
@@ -87,7 +84,7 @@ async def get_respondent_answers(qid:int):
     data = []
     for loc in locations:
         loc_q = await repo_answers.get_answers_per_q(loc["id"], qid)
-        if not len(loc_q) == 0:
+        if len(loc_q) != 0:
             loc_data = [ weights[qid-1][str(item["answer_choice"])] for item in loc_q]
             data.append(loc_data)
     arr = np.array(data)
@@ -101,7 +98,7 @@ async def answers_weight_multiply(gradient:int, qid:int):
     data = []
     for loc in locations:
         loc_q = await repo_answers.get_answers_per_q(loc["id"], qid)
-        if not len(loc_q) == 0:
+        if len(loc_q) != 0:
             loc_data = [ weights[qid-1][str(item["answer_choice"])] for item in loc_q]
             data.append(loc_data)
     arr = np.array(list(itertools.chain(*data)))
@@ -119,7 +116,7 @@ async def get_respondent_answers_stats(qid:int):
     data = []
     for loc in locations:
         loc_q = await repo_answers.get_answers_per_q(loc["id"], qid)
-        if not len(loc_q) == 0:
+        if len(loc_q) != 0:
             loc_data = [ weights[qid-1][str(item["answer_choice"])] for item in loc_q]
             data.append(loc_data)
     result = stats.describe(list(itertools.chain(*data)))
@@ -135,13 +132,13 @@ async def get_all_answers():
     for loc in locations:
         for qid in range(1, 13):
             loc_q1 = await repo_answers.get_answers_per_q(loc["id"], qid)
-            if not len(loc_q1) == 0:
+            if len(loc_q1) != 0:
                 loc_data = [ weights[qid-1][str(item["answer_choice"])] for item in loc_q1]
                 temp.append(loc_data)
         temp = list(itertools.chain(*temp))
-        if not len(temp) == 0:
+        if temp:
             data.append(temp)
-        temp = list()
+        temp = []
     arr = np.array(data)
     return ujson.loads(pd.DataFrame(arr).to_json(orient='split'))
 
@@ -159,26 +156,26 @@ async def plot_answers_mean():
     for loc in locations:
         for qid in range(1, 13):
             loc_q1 = await repo_answers.get_answers_per_q(loc["id"], qid)
-            if not len(loc_q1) == 0:
+            if len(loc_q1) != 0:
                 loc_data = [ weights[qid-1][str(item["answer_choice"])] for item in loc_q1]
                 temp.append(loc_data)
         temp = list(itertools.chain(*temp))
-        if not len(temp) == 0:
+        if temp:
             data.append(temp)
-        temp = list()
+        temp = []
     y = list(map(np.mean, data))
     filtered_image = BytesIO()
     plt.figure()
-    
+
     plt.plot(x, y)
- 
+
     plt.xlabel('Question Mean Score')
     plt.ylabel('State/Province')
     plt.title('Linear Plot of Poverty Status')
- 
+
     plt.savefig(filtered_image, format='png')
     filtered_image.seek(0)
-   
+
     return StreamingResponse(filtered_image, media_type="image/png")
 
 

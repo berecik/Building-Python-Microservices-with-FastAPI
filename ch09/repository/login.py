@@ -60,18 +60,16 @@ class LoginRepository:
         return True
     
     async def get_all_login(self):
-        logins = await self.engine.find(Login)
-        return logins
+        return await self.engine.find(Login)
             
     async def get_login_id(self, id:int): 
-        login = await self.engine.find_one(Login, Login.login_id == id) 
-        return login
+        return await self.engine.find_one(Login, Login.login_id == id)
     
     async def get_login_credentials(self, username:str, password:str):
         try:
-            login = await self.engine.find_one(Login, Login.username == username) 
-            if login == None or not pwd_context.verify(password, login.passphrase): 
-                return None 
+            login = await self.engine.find_one(Login, Login.username == username)
+            if login is None or not pwd_context.verify(password, login.passphrase): 
+                return None
             else:
                 return login
         except:
@@ -79,20 +77,17 @@ class LoginRepository:
     
     async def validate_login(self, username:str):
         try:
-            login = await self.engine.find_one(Login, Login.username == username) 
-            if login == None: 
-                return None 
-            else:
-                return login
+            login = await self.engine.find_one(Login, Login.username == username)
+            return None if login is None else login
         except:
             return login
         
     async def verify_password(self, username:str, password:str):
         try:
-            login = await self.engine.find_one(Login, Login.username == username) 
-            if login == None: 
-                return False 
+            login = await self.engine.find_one(Login, Login.username == username)
+            if login is None: 
+                return False
             else:
-               return pwd_context.verify(password, login.passphrase)
+                return pwd_context.verify(password, login.passphrase)
         except:
             return False

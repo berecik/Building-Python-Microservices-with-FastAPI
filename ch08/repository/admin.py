@@ -40,10 +40,8 @@ class AdminLoginRepository:
         
     async def join_login_admin(self):
         query = Admin.join(Login).select()
-        result = await query.gino.load(Admin.distinct(Admin.id).load(parent=Login)).all()
-        return result 
+        return await query.gino.load(Admin.distinct(Admin.id).load(parent=Login)).all() 
     
     async def join_admin_login(self):
-        result = await Admin.load(add_child=Login).query.gino.all()
-        return result 
+        return await Admin.load(add_child=Login).query.gino.all() 
 

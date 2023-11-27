@@ -18,7 +18,7 @@ router = APIRouter()
 def json_date_serializer(obj):
     if isinstance(obj, (datetime, date)):
         return obj.isoformat()
-    raise TypeError ("Type %s not serializable" % type(obj))
+    raise TypeError(f"Type {type(obj)} not serializable")
 
 def date_hook_deserializer(json_dict):
     for (key, value) in json_dict.items():
@@ -44,30 +44,30 @@ async def customer_list_ws(websocket: WebSocket):
     await websocket.accept()
     repo = CustomerRepository()
     result = await repo.get_all_customer()
-    
+
     for rec in result:
         data = rec.to_dict()
         await websocket.send_json(json.dumps(data, default=json_date_serializer))
         await asyncio.sleep(0.01)
         client_resp = await websocket.receive_json()
-        print("Acknowledging receipt of record id {}.".format(client_resp['rec_id']))
+        print(f"Acknowledging receipt of record id {client_resp['rec_id']}.")
     await websocket.close()
         
-@router.get("/customer/wsclient/list/")  
+@router.get("/customer/wsclient/list/")
 async def customer_list_ws_client():
     uri = "ws://localhost:8000/ch08/customer/list/ws"
     async with websockets.connect(uri) as websocket:
-            while True:
-                try:
-                    res = await websocket.recv()
-                    data_json = json.loads(res, object_hook=date_hook_deserializer)
-                   
-                    print("Received record: {}.".format(data_json))
-                   
-                    data_dict = json.loads(data_json)
-                    client_resp = {"rec_id": data_dict['id'] }
-                    await websocket.send(json.dumps(client_resp))
-                    
-                except websockets.ConnectionClosed:
-                    break
-            return {"message": "done"}
+        while True:
+            try:
+                res = await websocket.recv()
+                data_json = json.loads(res, object_hook=date_hook_deserializer)
+
+                print(f"Received record: {data_json}.")
+
+                data_dict = json.loads(data_json)
+                client_resp = {"rec_id": data_dict['id'] }
+                await websocket.send(json.dumps(client_resp))
+
+            except websockets.ConnectionClosed:
+                break
+        return {"message": "done"}

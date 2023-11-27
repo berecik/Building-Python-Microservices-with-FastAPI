@@ -4,7 +4,7 @@ from models.data.gino_models import Profile_Trainers
 class ProfileTrainerListQuery: 
     
     def __init__(self): 
-        self._records:List[Profile_Trainers] = list()
+        self._records: List[Profile_Trainers] = []
         
     @property
     def records(self):

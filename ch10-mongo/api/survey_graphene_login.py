@@ -9,7 +9,7 @@ import os
 def json_serial(obj):
     if isinstance(obj, (datetime, date)):
         return obj.strftime('%Y-%m-%dT%H:%M:%S.%f')
-    raise TypeError ("The type %s not serializable." % type(obj))
+    raise TypeError(f"The type {type(obj)} not serializable.")
   
 class LoginQuery(ObjectType):
     login_list = None
@@ -31,16 +31,13 @@ class CreateLoginData(Mutation):
     ok = Boolean()
     loginData = Field(lambda: LoginData)
 
-    async def mutate(root, info, id, username, password):
+    async def mutate(self, info, id, username, password):
         
         login_dict = {"id": id, "username": username, "password": password}
         login_json = dumps(login_dict, default=json_serial)
         repo = LoginRepository()
         result = await repo.add_login(loads(login_json))
-        if not result == None:
-          ok = True
-        else: 
-          ok = False
+        ok = result is not None
         return CreateLoginData(loginData=result, ok=ok)
 
 class ChangeLoginPassword(Mutation):
@@ -51,15 +48,12 @@ class ChangeLoginPassword(Mutation):
     ok = Boolean()
     loginData = Field(lambda: LoginData)
 
-    async def mutate(root, info, username, password):
+    async def mutate(self, info, username, password):
                 
         repo = LoginRepository()
         result = await repo.change_password(username, password)
-        
-        if not result == None:
-          ok = True
-        else: 
-          ok = False
+
+        ok = result is not None
         return CreateLoginData(loginData=result, ok=ok)
       
 class DeleteLoginData(Mutation):
@@ -69,15 +63,12 @@ class DeleteLoginData(Mutation):
     ok = Boolean()
     loginData = Field(lambda: LoginData)
 
-    async def mutate(root, info, id):
+    async def mutate(self, info, id):
                 
         repo = LoginRepository()
         result = await repo.delete_login(id)
-        
-        if not result == None:
-          ok = True
-        else: 
-          ok = False
+
+        ok = result is not None
         return DeleteLoginData(loginData=result, ok=ok)
 
 

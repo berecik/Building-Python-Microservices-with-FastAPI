@@ -27,7 +27,7 @@ async def get_respondent_answers_stats(qid:int):
     data = []
     for loc in locations:
         loc_q = await repo_answers.get_answers_per_q(loc["id"], qid)
-        if not len(loc_q) == 0:
+        if len(loc_q) != 0:
             loc_data = [ weights[qid-1][str(item["answer_choice"])] for item in loc_q]
             data.append(loc_data)
     result = stats.describe(list(itertools.chain(*data)))
@@ -43,12 +43,12 @@ async def get_all_answers():
     for loc in locations:
         for qid in range(1, 13):
             loc_q1 = await repo_answers.get_answers_per_q(loc["id"], qid)
-            if not len(loc_q1) == 0:
+            if len(loc_q1) != 0:
                 loc_data = [ weights[qid-1][str(item["answer_choice"])] for item in loc_q1]
                 temp.append(loc_data)
         temp = list(itertools.chain(*temp))
-        if not len(temp) == 0:
+        if temp:
             data.append(temp)
-        temp = list()
+        temp = []
     arr = np.array(data)
     return ujson.loads(pd.DataFrame(arr).to_json(orient='split'))

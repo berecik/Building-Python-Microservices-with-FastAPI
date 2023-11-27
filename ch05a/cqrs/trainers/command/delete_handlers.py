@@ -10,5 +10,4 @@ class DeleteTrainerCommandHandler(ICommandHandler):
         self.repo:TrainerRepository = TrainerRepository()
         
     async def handle(self, command:ProfileTrainerCommand) -> bool:
-        result = await self.repo.delete_trainer(command.details.get("id"))
-        return result
+        return await self.repo.delete_trainer(command.details.get("id"))

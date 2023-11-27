@@ -19,12 +19,12 @@ class ReferenceRepository:
         try:
             item = Category(**details)
             reference = Reference.one(Q.id==id)
-            if reference.categories == None:
-                reference.categories = list()
+            if reference.categories is None:
+                reference.categories = []
             reference.categories.append(item)
             reference.update()
         except:
-           return False 
+           return False
         return True
     
     def get_category(self, id:int, cat_id:int) -> Category:
@@ -61,9 +61,7 @@ class ReferenceRepository:
         return True
     
     def get_all_reference(self):
-        references = [ref.to_json_type() for ref in Reference.many()]
-        return references
+        return [ref.to_json_type() for ref in Reference.many()]
     
     def get_reference(self, id:int): 
-        reference = Reference.one(Q.id == id).to_json_type()
-        return reference
+        return Reference.one(Q.id == id).to_json_type()

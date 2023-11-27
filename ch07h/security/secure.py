@@ -44,8 +44,7 @@ def verify_password(plain_password, hashed_password):
 
 def authenticate(username, password, account:Login):
     try:
-        password_check = verify_password(password, account.passphrase)
-        return password_check
+        return verify_password(password, account.passphrase)
     except Exception as e:
         return False
     
@@ -54,7 +53,7 @@ def get_current_user(token: str = Depends(oauth2_scheme), sess:Session = Depends
     payload = validate_token(token.credentials, config.get('Okta', 'OKTA_ISSUER'), config.get('Okta', 'OKTA_AUDIENCE'), config.get('Okta', 'OKTA_CLIENT_ID'))
     print(payload["sub"])
     try:
-       
+
         auth_res = validate_remotely(
             token,
             config.get('Okta', 'OKTA_ISSUER'),
@@ -63,7 +62,7 @@ def get_current_user(token: str = Depends(oauth2_scheme), sess:Session = Depends
         )
         username = "sjctrags"
         password = "sjctrags"
-         
+
         loginrepo = LoginRepository(sess)
         user = loginrepo.get_all_login_username(username)
         if authenticate(username, password, user) == False:
@@ -72,19 +71,19 @@ def get_current_user(token: str = Depends(oauth2_scheme), sess:Session = Depends
             detail="Invalid authentication credentials",
             headers={"WWW-Authenticate": "Bearer"},
         )
-        
+
         if auth_res == False:
           raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid authentication credentials",
             headers={"WWW-Authenticate": "Bearer"},
         )
-     
+
     except Exception as e:
-        print("Error: " + str(e))
+        print(f"Error: {str(e)}")
         raise HTTPException(status_code=403)
 
-      
+
     return user
 
 def validate_remotely(token, issuer, clientId, clientSecret):
@@ -98,9 +97,9 @@ def validate_remotely(token, issuer, clientId, clientSecret):
         'client_secret': clientSecret,
         'token': token,
     }
-    url = issuer + '/v1/introspect'
+    url = f'{issuer}/v1/introspect'
 
     response = httpx.post(url, headers=headers, data=data)
-    
+
     return response.status_code == httpx.codes.OK and response.json()['active']
 

@@ -39,9 +39,7 @@ class KeyRepository:
         return True
     
     async def get_all_keyword(self):
-        keywords = await self.engine.find(Keyword)
-        return keywords
+        return await self.engine.find(Keyword)
             
     async def get_keyword(self, word:str): 
-        login = await self.engine.find_one(Keyword, Keyword.word == word) 
-        return login
+        return await self.engine.find_one(Keyword, Keyword.word == word)

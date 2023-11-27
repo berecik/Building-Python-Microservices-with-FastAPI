@@ -25,5 +25,4 @@ async def add_vendor(req: VendorReq):
 @router.get("/vendor/list")
 async def list_vendor():
     repo = VendorRepository()
-    result = await repo.get_all_vendor()
-    return result
+    return await repo.get_all_vendor()

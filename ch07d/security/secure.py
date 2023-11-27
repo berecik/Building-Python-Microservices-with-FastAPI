@@ -31,8 +31,7 @@ def verify_password(plain_password, hashed_password):
 
 def authenticate(username, password, account:Login):
     try:
-        password_check = verify_password(password, account.passphrase)
-        return password_check
+        return verify_password(password, account.passphrase)
     except Exception as e:
         print(e)
         return False
@@ -40,9 +39,8 @@ def authenticate(username, password, account:Login):
 def create_access_token(data: dict, expires_after: timedelta):
     plain_text = data.copy()
     expire = datetime.utcnow() + expires_after
-    plain_text.update({"exp": expire})
-    encoded_jwt = jwt.encode(plain_text, SECRET_KEY, algorithm=ALGORITHM)
-    return encoded_jwt
+    plain_text["exp"] = expire
+    return jwt.encode(plain_text, SECRET_KEY, algorithm=ALGORITHM)
        
 def get_current_user(token: str = Depends(oauth2_scheme), sess:Session = Depends(sess_db)):
     credentials_exception = HTTPException(

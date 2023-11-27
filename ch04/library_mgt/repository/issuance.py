@@ -15,9 +15,9 @@ class BookIssuanceRepository:
     def update_approval_details(self, approved_id:int, book_id:Optional[int] = None, approver:Optional[str] = None): 
         approved = book_issuance_tbl[approved_id]
         try: 
-            if not book_id == None: 
+            if book_id is not None: 
                 approved.book_id = book_id
-            elif not approver == None: 
+            elif approver is not None: 
                 approved.approved_by = approver
         except: 
             return False

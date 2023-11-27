@@ -7,13 +7,10 @@ class FacultySignupService:
         self.repo:FacultySignupRepository = FacultySignupRepository()
     
     def add_signup(self, signup: Signup): 
-        result = self.repo.insert_item(signup)
-        return result
+        return self.repo.insert_item(signup)
     
     def get_signup(self, sign_id:int): 
-        result = self.repo.get_item(sign_id)
-        return result
+        return self.repo.get_item(sign_id)
     
     def remove_signup(self, sign_id:int): 
-        result = self.repo.delete_item(sign_id)
-        return result
+        return self.repo.delete_item(sign_id)

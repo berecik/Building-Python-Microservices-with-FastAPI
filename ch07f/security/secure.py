@@ -35,17 +35,15 @@ oauth2_scheme = OAuth2AuthorizationCodeBearer(
 def create_access_token(data: dict, expires_delta: timedelta):
     to_encode = data.copy()
     expire = datetime.utcnow() + expires_delta
-    to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-    return encoded_jwt
+    to_encode["exp"] = expire
+    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
 def verify_password(plain_password, hashed_password):
     return crypt_context.verify(plain_password, hashed_password)
 
 def authenticate(username, password, account:Login):
     try:
-        password_check = verify_password(password, account.passphrase)
-        return password_check
+        return verify_password(password, account.passphrase)
     except Exception as e:
         print(e)
         return False
@@ -54,8 +52,8 @@ def get_current_user(security_scopes: SecurityScopes, token: str = Depends(oauth
     if security_scopes.scopes:
         authenticate_value = f'Bearer scope="{security_scopes.scope_str}"'
     else:
-        authenticate_value = f"Bearer"
-    
+        authenticate_value = "Bearer"
+
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -72,7 +70,7 @@ def get_current_user(security_scopes: SecurityScopes, token: str = Depends(oauth
         raise credentials_exception
     loginrepo = LoginRepository(sess)
     user = loginrepo.get_all_login_username(token_data.username)
- 
+
     if user is None:
         raise credentials_exception
     for scope in security_scopes.scopes:
@@ -85,6 +83,6 @@ def get_current_user(security_scopes: SecurityScopes, token: str = Depends(oauth
     return user
 
 def get_current_valid_user(current_user: Login = Security(get_current_user, scopes=["user"])):
-    if current_user == None:
+    if current_user is None:
         raise HTTPException(status_code=400, detail="Invalid user")
     return current_user

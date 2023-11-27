@@ -39,9 +39,7 @@ class QuestionRepository:
         return True
     
     async def get_all_question(self):
-        questions = await self.engine.find(Question)
-        return questions
+        return await self.engine.find(Question)
             
     async def get_question(self, id:int): 
-        question = await self.engine.find_one(Question, Question.question_id == id) 
-        return question
+        return await self.engine.find_one(Question, Question.question_id == id)

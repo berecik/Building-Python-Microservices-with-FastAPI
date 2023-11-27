@@ -39,11 +39,11 @@ class SubscriptionCustomerRepository:
         
     async def join_subscription_customer(self):
         query = Subscription.join(Customer).select()
-        result = await query.gino.load(Subscription.distinct(Subscription.id).load(parent=Customer)).all()
-        return result 
+        return await query.gino.load(
+            Subscription.distinct(Subscription.id).load(parent=Customer)
+        ).all() 
     
     async def join_customer_subscription_total(self):
-        result = await Customer.load(add_child=Subscription).query.gino.all()
-        return result 
+        return await Customer.load(add_child=Subscription).query.gino.all() 
 
 

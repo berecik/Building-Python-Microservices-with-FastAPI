@@ -25,31 +25,27 @@ def add_signup(req: SignupReq, sess:Session = Depends(sess_db)):
 @router.get("/signup/list", response_model=List[SignupReq])
 def list_signup(current_user: Login = Security(get_current_valid_user, scopes=["admin_read"]), sess:Session = Depends(sess_db)):
     repo:SignupRepository = SignupRepository(sess)
-    result = repo.get_all_signup()
-    return result
+    return repo.get_all_signup()
 
 @router.patch("/signup/update")
 def update_signup(id:int, req: SignupReq, current_user: Login = Security(get_current_valid_user, scopes=["admin_write"]), sess:Session = Depends(sess_db) ):
     signup_dict = req.dict(exclude_unset=True)
     repo:SignupRepository = SignupRepository(sess)
-    result = repo.update_signup(id, signup_dict )
-    if result: 
+    if result := repo.update_signup(id, signup_dict):
         return JSONResponse(content={'message':'profile updated successfully'}, status_code=201)
-    else: 
+    else:
         return JSONResponse(content={'message':'update profile error'}, status_code=500)
     
 
 @router.delete("/signup/delete")
 def delete_signup(id:int, current_user: Login = Security(get_current_valid_user, scopes=["admin_write"]), sess:Session = Depends(sess_db) ):
     repo:SignupRepository = SignupRepository(sess)
-    result = repo.delete_signup(id )
-    if result: 
+    if result := repo.delete_signup(id):
         return JSONResponse(content={'message':'profile updated successfully'}, status_code=201)
-    else: 
+    else:
         return JSONResponse(content={'message':'update profile error'}, status_code=500)
     
 @router.get("/signup/list/{id}", response_model=SignupReq)
 def get_signup(id:int, current_user: Login = Security(get_current_valid_user, scopes=["admin_read"]), sess:Session = Depends(sess_db)): 
     repo:SignupRepository = SignupRepository(sess)
-    result = repo.get_signup(id)
-    return result
+    return repo.get_signup(id)

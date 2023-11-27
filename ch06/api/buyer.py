@@ -14,7 +14,7 @@ router = APIRouter()
 def json_serialize_date(obj):
     if isinstance(obj, (date, datetime)):
         return obj.strftime('%Y-%m-%dT%H:%M:%S')
-    raise TypeError ("The type %s not serializable." % type(obj))
+    raise TypeError(f"The type {type(obj)} not serializable.")
 
 def json_serialize_oid(obj):
    
@@ -22,7 +22,7 @@ def json_serialize_oid(obj):
         return str(obj)
     elif isinstance(obj, date):
         return obj.isoformat()
-    raise TypeError ("The type %s not serializable." % type(obj))
+    raise TypeError(f"The type {type(obj)} not serializable.")
 
 @router.post("/buyer/add")
 def add_buyer(req: BuyerReq, db=Depends(create_db_collections)): 

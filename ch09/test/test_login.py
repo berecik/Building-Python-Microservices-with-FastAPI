@@ -10,9 +10,8 @@ from motor.motor_asyncio import AsyncIOMotorClient
 client = TestClient(app)
 
 def db_connect():
-    client_od = AsyncIOMotorClient(f"mongodb://localhost:27017/")
-    engine = AIOEngine(motor_client=client_od, database="orrs_test")
-    return engine
+    client_od = AsyncIOMotorClient("mongodb://localhost:27017/")
+    return AIOEngine(motor_client=client_od, database="orrs_test")
 
 async def get_user():
     return Login(**{"username": "sjctrags", "login_id": 101,  "password":"sjctrags", "passphrase": None, "profile": None})

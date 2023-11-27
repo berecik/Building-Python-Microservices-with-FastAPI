@@ -10,15 +10,15 @@ class OfficialRepository:
     
     async def insert_official(self, details:Dict[str, Any]) -> bool: 
         try:
-           official = await self.officials.find_one({"official_id": details["official_id"]})
-           if not official == None:
-               return False
-           else: 
-               await self.officials.insert_one(details)
-                  
+            official = await self.officials.find_one({"official_id": details["official_id"]})
+            if official is not None:
+                return False
+            else: 
+                await self.officials.insert_one(details)
+
         except Exception as e:
             print(e)
-            return False 
+            return False
         return True
     
     async def update_official(self, id:str, details:Dict[str, Any]): 

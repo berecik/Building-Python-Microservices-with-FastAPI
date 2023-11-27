@@ -38,21 +38,23 @@ class PublicationRepository:
 class PublicationVendorRepository:
     async def join_publication_vendor(self):
         query = Publication.join(Vendor).select()
-        result = await query.gino.load(Publication.distinct(Publication.id).load(parent=Vendor)).all()
-        return result 
+        return await query.gino.load(
+            Publication.distinct(Publication.id).load(parent=Vendor)
+        ).all() 
     
     async def join_vendor_publication(self):
         query = Publication.join(Vendor).select()
-        result = await query.gino.load(Vendor.distinct(Vendor.id).load(add_child=Publication)).all()
-        return result 
+        return await query.gino.load(
+            Vendor.distinct(Vendor.id).load(add_child=Publication)
+        ).all() 
     
 class PublicationMessengerRepository:
     async def join_publication_messenger(self):
         query = Publication.join(Messenger).select()
-        result = await query.gino.load(Publication.distinct(Publication.id).load(parent=Messenger)).all()
-        return result 
+        return await query.gino.load(
+            Publication.distinct(Publication.id).load(parent=Messenger)
+        ).all() 
     
     async def join_messenger_publication(self):
-        result = await Messenger.load(add_child=Publication).query.gino.all()
-        return result 
+        return await Messenger.load(add_child=Publication).query.gino.all() 
     

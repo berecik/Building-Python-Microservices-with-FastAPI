@@ -31,43 +31,37 @@ def add_signup(req: SignupReq, sess:Session = Depends(sess_db)):
 @router.get("/signup/list", response_model=List[SignupReq])
 def list_signup(sess:Session = Depends(sess_db)):
     repo:SignupRepository = SignupRepository(sess)
-    result = repo.get_all_signup()
-    return result
+    return repo.get_all_signup()
 
 @router.patch("/signup/update")
 def update_signup(id:int, req: SignupReq, sess:Session = Depends(sess_db) ):
     signup_dict = req.dict(exclude_unset=True)
     repo:SignupRepository = SignupRepository(sess)
-    result = repo.update_signup(id, signup_dict )
-    if result: 
+    if result := repo.update_signup(id, signup_dict):
         return JSONResponse(content={'message':'profile updated successfully'}, status_code=201)
-    else: 
+    else:
         return JSONResponse(content={'message':'update profile error'}, status_code=500)
     
 
 @router.delete("/signup/delete/{id}")
 def delete_signup(id:int, sess:Session = Depends(sess_db) ):
     repo:SignupRepository = SignupRepository(sess)
-    result = repo.delete_signup(id )
-    if result: 
+    if result := repo.delete_signup(id):
         return JSONResponse(content={'message':'profile deleted successfully'}, status_code=201)
-    else: 
+    else:
         return JSONResponse(content={'message':'delete profile error'}, status_code=500)
     
 @router.get("/signup/list/{id}", response_model=SignupReq)
 def get_signup(id:int, sess:Session = Depends(sess_db)): 
     repo:SignupRepository = SignupRepository(sess)
-    result = repo.get_signup(id)
-    return result
+    return repo.get_signup(id)
 
 @router.get("/login/memberslist")
 def get_join_login_members(sess:Session = Depends(sess_db)): 
     repo:LoginMemberRepository = LoginMemberRepository(sess)
-    result = repo.join_login_members()
-    return result
+    return repo.join_login_members()
 
 @router.get("/member/attendance")
 def get_join_member_attendance(sess:Session = Depends(sess_db)): 
     repo:MemberAttendanceRepository = MemberAttendanceRepository(sess)
-    result = repo.join_member_attendance()
-    return result
+    return repo.join_member_attendance()

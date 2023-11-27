@@ -27,26 +27,26 @@ async def plot_answers_mean():
     for loc in locations:
         for qid in range(1, 13):
             loc_q1 = await repo_answers.get_answers_per_q(loc["id"], qid)
-            if not len(loc_q1) == 0:
+            if len(loc_q1) != 0:
                 loc_data = [ weights[qid-1][str(item["answer_choice"])] for item in loc_q1]
                 temp.append(loc_data)
         temp = list(itertools.chain(*temp))
-        if not len(temp) == 0:
+        if temp:
             data.append(temp)
-        temp = list()
+        temp = []
     y = list(map(np.mean, data))
     filtered_image = BytesIO()
     plt.figure()
-    
+
     plt.plot(x, y)
- 
+
     plt.xlabel('Question Mean Score')
     plt.ylabel('State/Province')
     plt.title('Linear Plot of Poverty Status')
- 
+
     plt.savefig(filtered_image, format='png')
     filtered_image.seek(0)
-   
+
     return StreamingResponse(filtered_image, media_type="image/png")
 
 

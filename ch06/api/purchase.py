@@ -13,7 +13,7 @@ router = APIRouter()
 def json_serial(obj):
     if isinstance(obj, (datetime, date)):
         return obj.strftime('%Y-%m-%dT%H:%M:%S.%f')
-    raise TypeError ("The type %s not serializable." % type(obj))
+    raise TypeError(f"The type {type(obj)} not serializable.")
 
 router.add_event_handler("startup", create_db_connection)
 router.add_event_handler("shutdown", close_db_connection)

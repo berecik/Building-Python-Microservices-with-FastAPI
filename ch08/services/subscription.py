@@ -27,14 +27,11 @@ def fetch_records(rate, loop) -> rx.Observable:
 
 def filter_within_dates(rec, min_date:date, max_date:date):
     date_pur = datetime.strptime(rec['date_purchased'], '%Y-%m-%d')
-    if date_pur.date() >= min_date and date_pur.date() <= max_date:
-        return True
-    else:
-        return False
+    return date_pur.date() >= min_date and date_pur.date() <= max_date
     
 
 async def convert_str(rec):
-    if not rec == None:
+    if rec is not None:
         total = rec['qty'] * rec['price']
         record = " ".join([rec['branch'], str(total), rec['date_purchased'] ])
         await asyncio.sleep(1)
@@ -49,9 +46,8 @@ async def fetch_subscription(min_date:date, max_date:date, loop) -> rx.Observabl
         content = await client.get('https://localhost:8000/ch08/subscription/list/all', headers=headers)
     y = json.loads(content.text)
     source = rx.from_(y)
-    observable = source.pipe(
-      ops.filter(lambda c: filter_within_dates(c, min_date, max_date)),
-      ops.map(lambda a: rx.from_future(loop.create_task(convert_str(a)))),
-      ops.merge_all(),
+    return source.pipe(
+        ops.filter(lambda c: filter_within_dates(c, min_date, max_date)),
+        ops.map(lambda a: rx.from_future(loop.create_task(convert_str(a)))),
+        ops.merge_all(),
     )
-    return observable

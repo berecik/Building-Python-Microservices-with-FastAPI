@@ -12,15 +12,15 @@ class BuyerRepository:
     
     async def insert_buyer(self, users, details:Dict[str, Any]) -> bool: 
         try:
-           user = await users.find_one({"_id": details["user_id"]})
-           print(user)
-           if user == None:
-               return False
-           else: 
-               await self.buyers.insert_one(details)
-                  
+            user = await users.find_one({"_id": details["user_id"]})
+            print(user)
+            if user is None:
+                return False
+            else: 
+                await self.buyers.insert_one(details)
+
         except Exception as e:
-            return False 
+            return False
         return True
     
     async def add_purchase_history(self, id:int, details:Dict[str, Any]): 

@@ -68,11 +68,9 @@ def remove_profile(login_id:int):
 @router.get("/profile/login/all", dependencies=[Depends(create_db)])
 def list_all_profile(): 
     repo:UserProfileRepository = UserProfileRepository()
-    profiles = repo.get_all_profile()
-    return profiles
+    return repo.get_all_profile()
 
 @router.get("/profile/login/{login_id}", dependencies=[Depends(create_db)])
 def get_profile(login_id:int): 
     repo:UserProfileRepository = UserProfileRepository()
-    profile = repo.get_profile(login_id)
-    return profile
+    return repo.get_profile(login_id)

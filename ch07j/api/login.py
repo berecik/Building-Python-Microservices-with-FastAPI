@@ -18,26 +18,29 @@ router = APIRouter()
 @router.get("/approve/signup")
 def signup_approve(username:str, credentials: HTTPBasicCredentials = Depends(http_basic), sess:Session = Depends(sess_db)): 
     signuprepo = SignupRepository(sess)
-    result:Signup = signuprepo.get_signup_username(username) 
+    result:Signup = signuprepo.get_signup_username(username)
     print(result)
-    if result == None: 
+    if result is None:
         return JSONResponse(content={'message':'username is not valid'}, status_code=401)
-    else:
-        passphrase = get_password_hash(result.password)
-        login = Login(id=result.id, username=result.username, password=result.password, passphrase=passphrase, approved_date=date.today())
-        loginrepo = LoginRepository(sess)
-        success  = loginrepo.insert_login(login)
-        if success == False: 
-            return JSONResponse(content={'message':'create login problem encountered'}, status_code=500)
-        else:
-            return login
+    passphrase = get_password_hash(result.password)
+    login = Login(id=result.id, username=result.username, password=result.password, passphrase=passphrase, approved_date=date.today())
+    loginrepo = LoginRepository(sess)
+    success  = loginrepo.insert_login(login)
+    return (
+        JSONResponse(
+            content={'message': 'create login problem encountered'},
+            status_code=500,
+        )
+        if success == False
+        else login
+    )
         
 @router.get("/login")
 def login(credentials: HTTPBasicCredentials = Depends(http_basic), sess:Session = Depends(sess_db)):
     
     loginrepo = LoginRepository(sess)
     account = loginrepo.get_all_login_username(credentials.username)
-    if authenticate(credentials, account) and not account == None:
+    if authenticate(credentials, account) and account is not None:
         return account
     else:
         raise HTTPException(

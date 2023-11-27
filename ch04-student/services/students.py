@@ -8,16 +8,13 @@ class StudentService:
         self.repo:StudentRepository = StudentRepository()
         
     def add_student(self, student:Student): 
-        result = self.repo.insert_student(student)
-        return result
+        return self.repo.insert_student(student)
     
     def update_student(self, stud_id:int, details:Dict[str, Any]): 
-        result = self.repo.update_student(stud_id, details)
-        return result 
+        return self.repo.update_student(stud_id, details) 
     
     def remove_student(self, stud_id:int): 
-        result = self.repo.delete_student(stud_id)
-        return result 
+        return self.repo.delete_student(stud_id) 
     
     def list_students(self): 
         return self.repo.get_all_students()
