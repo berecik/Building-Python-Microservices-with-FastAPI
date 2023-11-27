@@ -17,7 +17,7 @@ router.add_event_handler("shutdown", db_disconnect)
 def json_serial(obj):
     if isinstance(obj, (datetime, date)):
         return obj.strftime('%Y-%m-%dT%H:%M:%S')
-    raise TypeError ("The type %s not serializable." % type(obj))
+    raise TypeError(f"The type {type(obj)} not serializable.")
 
 @router.post("/cart/add/item")
 async def add_cart_item(req:CartReq): 

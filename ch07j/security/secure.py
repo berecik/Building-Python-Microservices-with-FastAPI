@@ -21,8 +21,7 @@ def verify_password(plain_password, hashed_password):
 
 def authenticate(username, password, account:Login):
     try:
-        password_check = verify_password(password, account.passphrase)
-        return password_check
+        return verify_password(password, account.passphrase)
     except Exception as e:
         print(e)
         return False
@@ -36,14 +35,14 @@ class UsernameAuthBackend(AuthenticationBackend):
             return
 
         auth = request.headers["Authorization"]
-        
+
         try:
             scheme, username = auth.split()
             if scheme.lower().strip() != 'bearer'.strip():
                 return
         except:
             raise AuthenticationError('Invalid basic auth credentials')
-        if not username == self.username:
+        if username != self.username:
             return
-       
+
         return AuthCredentials(["authenticated"]), SimpleUser(username)

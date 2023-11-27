@@ -7,14 +7,18 @@ class FacultySettings(BaseSettings):
     webmaster:str = 'sjctrags@university.com'
     created:date = '2021-11-10'
 
+
+
 class ServerSettings(BaseSettings): 
     production_server:str
     prod_port:int
-    development_server:str 
+    development_server:str
     dev_port:int
-    
+
+
+
     class Config: 
-        env_file = os.getcwd() + '/configuration/erp_settings.properties'
+        env_file = f'{os.getcwd()}/configuration/erp_settings.properties'
         
 
     

@@ -3,7 +3,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 
 def create_async_db():
     global client
-    client = AsyncIOMotorClient(str("localhost:27017"))
+    client = AsyncIOMotorClient("localhost:27017")
 
 def create_db_collections():
     db = client.osms

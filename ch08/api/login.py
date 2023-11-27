@@ -41,8 +41,7 @@ def update_login(id:int, req: LoginReq):
 def list_login():
     repo = LoginRepository()
     result = yield from repo.get_all_login()
-    data = jsonable_encoder(result)
-    return data
+    return jsonable_encoder(result)
 
     
 @router.get("/login/list/records")

@@ -24,13 +24,13 @@ class Assessment(BaseModel):
     
 @router.post("/feedback/add")
 def post_tourist_feedback(touristId: UUID, tid: UUID, post: Post, bg_task: BackgroundTasks):
-    if approved_users.get(touristId) == None and tours.get(tid) == None:
+    if approved_users.get(touristId) is None and tours.get(tid) is None:
         raise PostFeedbackException(detail='tourist and tour details invalid', status_code=403)
     assessId = uuid1()
-    assessment = Assessment(id=assessId, post=post, tour_id= tid, tourist_id=touristId) 
+    assessment = Assessment(id=assessId, post=post, tour_id= tid, tourist_id=touristId)
     feedback_tour[assessId] = assessment
     tours[tid].ratings = (tours[tid].ratings + post.rating)/2
-    
+
     assess_json = jsonable_encoder(assessment)
     bg_task.add_task(audit_log_transaction, str(touristId), message="post_tourist_feedback")
     return JSONResponse(content=assess_json, status_code=200)
@@ -38,7 +38,7 @@ def post_tourist_feedback(touristId: UUID, tid: UUID, post: Post, bg_task: Backg
 @router.post("/feedback/update/rating")
 def update_tour_rating(assessId: UUID, new_rating: StarRating):
     print(new_rating)
-    if feedback_tour.get(assessId) == None:
+    if feedback_tour.get(assessId) is None:
         raise PostRatingException(detail='tour assessment invalid', status_code=403)
     tid = feedback_tour[assessId].tour_id
     tours[tid].ratings = (tours[tid].ratings + new_rating)/2
@@ -47,7 +47,7 @@ def update_tour_rating(assessId: UUID, new_rating: StarRating):
 
 @router.delete("/feedback/delete")
 async def delete_tourist_feedback(assessId: UUID, touristId: UUID ):
-    if approved_users.get(touristId) == None and feedback_tour.get(assessId):
+    if approved_users.get(touristId) is None and feedback_tour.get(assessId):
         raise PostFeedbackException(detail='tourist and tour details invalid', status_code=403)
     post_delete = [access for access in feedback_tour.values() if access.id == assessId]
     for access in post_delete:

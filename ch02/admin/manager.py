@@ -16,8 +16,19 @@ router = APIRouter()
 def add_tour_destination(input: TourInput):
     try:
         tid = uuid1()
-        tour = Tour(id=tid, name=input.name, city=input.city, country=input.country, type=input.type, location=input.location,
-                    amenities=input.amenities, feedbacks=list(), ratings=0.0, visits=0, isBooked=False)
+        tour = Tour(
+            id=tid,
+            name=input.name,
+            city=input.city,
+            country=input.country,
+            type=input.type,
+            location=input.location,
+            amenities=input.amenities,
+            feedbacks=[],
+            ratings=0.0,
+            visits=0,
+            isBooked=False,
+        )
         tour_basic_info = TourBasicInfo(id=tid, name=input.name, type=input.type, amenities=input.amenities, ratings=0.0)
         tour_location = TourLocation(id=tid, name=input.name, city=input.city, country=input.country, location=input.location )
         tours[tid] = tour

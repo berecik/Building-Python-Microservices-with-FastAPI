@@ -10,15 +10,15 @@ class PlayerRepository:
     
     async def insert_player(self, details:Dict[str, Any]) -> bool: 
         try:
-           player = await self.players.find_one({"player_id": details["player_id"]})
-           if not player == None:
-               return False
-           else: 
-               await self.players.insert_one(details)
-                  
+            player = await self.players.find_one({"player_id": details["player_id"]})
+            if player is not None:
+                return False
+            else: 
+                await self.players.insert_one(details)
+
         except Exception as e:
             print(e)
-            return False 
+            return False
         return True
     
     async def update_player(self, id:str, details:Dict[str, Any]): 

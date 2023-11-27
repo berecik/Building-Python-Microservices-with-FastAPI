@@ -16,7 +16,7 @@ router = APIRouter()
 def json_serialize_date(obj):
     if isinstance(obj, (date, datetime)):
         return obj.strftime('%Y-%m-%dT%H:%M:%S')
-    raise TypeError ("The type %s not serializable." % type(obj))
+    raise TypeError(f"The type {type(obj)} not serializable.")
 
 def json_serialize_oid(obj):
    
@@ -24,7 +24,7 @@ def json_serialize_oid(obj):
         return str(obj)
     elif isinstance(obj, date):
         return obj.isoformat()
-    raise TypeError ("The type %s not serializable." % type(obj))
+    raise TypeError(f"The type {type(obj)} not serializable.")
 
 @router.post("/login/add")
 async def add_login(req: Login, db=Depends(create_db_collections)): 
@@ -32,12 +32,11 @@ async def add_login(req: Login, db=Depends(create_db_collections)):
     login_json = dumps(login_dict, default=json_serialize_date)
     repo:LoginRepository = LoginRepository(db["users"])
     result = await repo.insert_login(loads(login_json))  
-   
-    if result == True: 
-        logging.info('Added a new login record.')
-        return JSONResponse(content={"message": "add buyer successful"}, status_code=201) 
-    else: 
-        return JSONResponse(content={"message": "add buyer unsuccessful"}, status_code=500) 
+
+    if result != True:
+        return JSONResponse(content={"message": "add buyer unsuccessful"}, status_code=500)
+    logging.info('Added a new login record.')
+    return JSONResponse(content={"message": "add buyer successful"}, status_code=201) 
 
    
 @router.patch("/login/update")

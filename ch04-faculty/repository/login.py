@@ -26,13 +26,10 @@ class FacultyLoginRepository:
             return False 
         return True
     
-    def get_login(self, username:str) :
+    def get_login(self, username:str):
         try:
-           login = [v  for v in  faculty_login_tbl.values() if v.username == username]
-           if not len(login) == 0: 
-              return login[0]
-           else: 
-              return None
+            login = [v  for v in  faculty_login_tbl.values() if v.username == username]
+            return login[0] if login else None
         except:
             return None
         

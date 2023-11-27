@@ -39,5 +39,4 @@ class RespondentRepository:
         return await Respondent.objects().get(Respondent.id == id)
     
     async def list_gender(self,gender:str):
-        respondents = await Respondent.select().where(Respondent.gender == gender)
-        return respondents
+        return await Respondent.select().where(Respondent.gender == gender)

@@ -25,5 +25,4 @@ def report_recipe(rid: UUID, complaintservice=deps.depends(BadRecipeRepository))
 
 @router.get("/complaint/list/all")
 def list_defective_recipes(complaintservice=deps.depends(BadRecipeRepository)): 
-    defects_list = jsonable_encoder(complaintservice.query_bad_recipes())
-    return defects_list
+    return jsonable_encoder(complaintservice.query_bad_recipes())

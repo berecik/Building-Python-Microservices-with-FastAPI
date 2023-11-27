@@ -8,16 +8,13 @@ class AssignmentService:
         self.repo:AssignmentRepository = AssignmentRepository()
     
     def add_assignment(self, assignment:Assignment): 
-        result = self.repo.insert_assignment(assignment)
-        return result
+        return self.repo.insert_assignment(assignment)
     
     def update_assignment(self, assgn_id:int, details:Dict[str, Any]): 
-        result = self.repo.update_assignment(assgn_id, details)
-        return result 
+        return self.repo.update_assignment(assgn_id, details) 
     
     def remove_assignment(self, assgn_id:int): 
-        result = self.repo.delete_assignment(assgn_id)
-        return result 
+        return self.repo.delete_assignment(assgn_id) 
     
     def list_assignment(self): 
         return self.repo.get_all_assignment()
@@ -33,12 +30,10 @@ class AssignmentSubmissionService:
         return (result, bin_id)
     
     def add_assigment(self, bin_id:int, assignment: Assignment ): 
-        result = self.repo.insert_submission(bin_id, assignment ) 
-        return result
+        return self.repo.insert_submission(bin_id, assignment )
     
     def remove_assignment(self, bin_id:int, assignment: Assignment): 
-        result = self.repo.insert_submission(bin_id, assignment )
-        return result
+        return self.repo.insert_submission(bin_id, assignment )
     
     def list_assignments(self, bin_id:int): 
         return self.repo.get_submissions(bin_id)

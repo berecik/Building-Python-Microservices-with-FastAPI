@@ -32,14 +32,12 @@ def add_recipe_keyword(rid: UUID, keyword: str, keywordservice: KeywordRepositor
 @router.post("/keyword/get")
 @inject
 def get_recipe_keywords(rid: UUID, keywordservice: KeywordRepository = Depends(Provide[Container.keywordservice])): 
-    keywords_json = jsonable_encoder(keywordservice.query_keywords(rid)) 
-    return keywords_json
+    return jsonable_encoder(keywordservice.query_keywords(rid))
     
 @router.get("/keyword/list")
 @inject
 def get_all_keywords(keywordservice: KeywordRepository = Depends(Provide[Container.keywordservice])): 
-    keywords_json = jsonable_encoder(keywordservice.query_all_keywords()) 
-    return keywords_json 
+    return jsonable_encoder(keywordservice.query_all_keywords()) 
 
 
 container = Container()

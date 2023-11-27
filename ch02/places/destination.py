@@ -100,12 +100,11 @@ def check_tour_profile(id: UUID):
 
 @router.get("/ch02/destinations/amenities/tour/{id}")
 def show_amenities(id: UUID):
-    if tours[id].amenities != None:
-        amenities = tours[id].amenities
-        amenities_json = jsonable_encoder(amenities)
-        return JSONResponse(content=amenities_json)
-    else:
-         return {"message": "no amenities"}
+    if tours[id].amenities is None:
+        return {"message": "no amenities"}
+    amenities = tours[id].amenities
+    amenities_json = jsonable_encoder(amenities)
+    return JSONResponse(content=amenities_json)
 
 @router.get("/ch02/destinations/mostbooked")
 def check_recommended_tour(resp: Response):

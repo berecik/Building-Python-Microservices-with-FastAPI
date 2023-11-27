@@ -96,10 +96,10 @@ class Assignment:
 
 class StudentBin: 
     def __init__(self, bin_id:int, stud_id:int, faculty_id:int): 
-        self.bin_id:int = bin_id 
-        self.stud_id:int = stud_id 
-        self.faculty_id:int = faculty_id 
-        self.assignment:List[Assignment] = list()
+        self.bin_id:int = bin_id
+        self.stud_id:int = stud_id
+        self.faculty_id:int = faculty_id
+        self.assignment: List[Assignment] = []
         
     
     def __repr__(self): 

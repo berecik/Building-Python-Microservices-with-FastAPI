@@ -37,12 +37,10 @@ class RestaurantRepository:
         return True
     
     async def get_all_restaurant(self):
-        restaurants = await self.engine.find(Restaurant)
-        return restaurants
+        return await self.engine.find(Restaurant)
             
     async def get_restaurant(self, id:int): 
-        restaurant = await self.engine.find_one(Restaurant, Restaurant.restaurant_id == id) 
-        return restaurant
+        return await self.engine.find_one(Restaurant, Restaurant.restaurant_id == id)
     
     async def add_feedback(self, id:int, details:Dict[str, Any]):
        try:

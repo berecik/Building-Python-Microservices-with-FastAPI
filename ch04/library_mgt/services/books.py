@@ -8,16 +8,13 @@ class BookService:
         self.repo:BookRepository = BookRepository()
         
     def add_book(self, book:Book): 
-        result = self.repo.insert_book(book)
-        return result
+        return self.repo.insert_book(book)
     
     def update_book(self, book_id:int, details:Dict[str, Any]): 
-        result = self.repo.update_book(book_id, details )
-        return result 
+        return self.repo.update_book(book_id, details ) 
     
     def remove_book(self, book_id:int): 
-        result = self.repo.delete_book(book_id)
-        return result 
+        return self.repo.delete_book(book_id) 
     
     def list_book(self): 
         return self.repo.get_all_books()

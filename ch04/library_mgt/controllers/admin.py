@@ -41,8 +41,7 @@ def delete_book(book_id:int):
 def update_book_details(book_id:int, book_details:BookDetails): 
     book_dict = book_details.dict(exclude_unset=True)
     book_service = BookService()
-    result = book_service.update_book(book_id, book_dict )
-    if result: 
+    if result := book_service.update_book(book_id, book_dict):
         return JSONResponse(content={'message':'book details updated successfully'}, status_code=201)
-    else: 
+    else:
         return JSONResponse(content={'message':'book details update error'}, status_code=500)

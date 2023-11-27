@@ -16,14 +16,14 @@ router = APIRouter()
 def json_serialize_date(obj):
     if isinstance(obj, (date, datetime)):
         return obj.strftime('%Y-%m-%dT%H:%M:%S')
-    raise TypeError ("The type %s not serializable." % type(obj))
+    raise TypeError(f"The type {type(obj)} not serializable.")
 
 def json_serialize_oid(obj):
     if isinstance(obj, ObjectId):
         return str(obj)
     elif isinstance(obj, date):
         return obj.isoformat()
-    raise TypeError ("The type %s not serializable." % type(obj))
+    raise TypeError(f"The type {type(obj)} not serializable.")
 
 @router.post("/official/add")
 async def add_official(req: Official, db=Depends(create_db_collections)): 
@@ -31,12 +31,11 @@ async def add_official(req: Official, db=Depends(create_db_collections)):
     official_json = dumps(official_dict, default=json_serialize_date)
     repo:OfficialRepository = OfficialRepository(db["officials"])
     result = await repo.insert_official(loads(official_json))  
-   
-    if result == True: 
-        logging.info('Added a new official record.')
-        return JSONResponse(content={"message": "add official successful"}, status_code=201) 
-    else: 
-        return JSONResponse(content={"message": "add official unsuccessful"}, status_code=500) 
+
+    if result != True:
+        return JSONResponse(content={"message": "add official unsuccessful"}, status_code=500)
+    logging.info('Added a new official record.')
+    return JSONResponse(content={"message": "add official successful"}, status_code=201) 
     
 @router.get("/official/list/all")
 async def list_all_official(db=Depends(create_db_collections)): 

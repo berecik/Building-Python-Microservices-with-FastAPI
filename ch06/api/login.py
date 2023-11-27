@@ -47,5 +47,4 @@ def list_all_login():
 @router.get("/login/login/{id}")
 def get_login(id:int): 
     repo:LoginRepository = LoginRepository()
-    login = repo.get_login(id)
-    return login
+    return repo.get_login(id)

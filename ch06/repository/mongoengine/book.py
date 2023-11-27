@@ -48,9 +48,7 @@ class BookRepository:
     
         
     def get_all_book(self):
-        books = Book.objects()
-        return books
+        return Book.objects()
     
     def get_book(self, id:int): 
-        book = Book.objects(id=id).get()
-        return book
+        return Book.objects(id=id).get()

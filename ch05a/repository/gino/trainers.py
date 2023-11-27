@@ -40,13 +40,15 @@ class GymClassRepository:
         
     async def join_classes_trainer(self):
         query = Gym_Class.join(Profile_Trainers).select()
-        result = await query.gino.load(Gym_Class.distinct(Gym_Class.id).load(parent=Profile_Trainers)).all()
-        return result 
+        return await query.gino.load(
+            Gym_Class.distinct(Gym_Class.id).load(parent=Profile_Trainers)
+        ).all() 
     
     async def join_member_classes(self):
         query = Gym_Class.join(Profile_Members).select()
-        result = await query.gino.load(Profile_Members.distinct(Profile_Members.id).load(add_child=Gym_Class)).all()
-        return result 
+        return await query.gino.load(
+            Profile_Members.distinct(Profile_Members.id).load(add_child=Gym_Class)
+        ).all() 
 
     async def join_classes_member(self):
         result = await Profile_Members.load(add_child=Gym_Class).query.gino.all()

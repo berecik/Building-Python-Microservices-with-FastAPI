@@ -11,8 +11,13 @@ from datetime import date
 router = APIRouter()
 
 async def create_post(id:UUID, feedback: str, rating: RecipeRating, userId: UUID, date_posted: date): 
-    post = {"id": id, "feedback": feedback, "rating": rating, "userId" : userId, "date_posted": date_posted}
-    return post
+    return {
+        "id": id,
+        "feedback": feedback,
+        "rating": rating,
+        "userId": userId,
+        "date_posted": date_posted,
+    }
 
 @router.post("/posts/insert", dependencies=[Depends(check_feedback_length)])
 async def insert_post_feedback(post=Depends(create_post), handler=Depends(get_post_service)): 

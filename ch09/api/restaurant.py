@@ -133,8 +133,7 @@ async def list_restaurants(request: Request, engine=Depends(create_db_engine), u
 
 @router.get("/restaurant/list/names")
 async def list_restaurant_names(request: Request, user: str = Depends(get_current_user)):
-    resto_names = request.session['resto_names']
-    return resto_names
+    return request.session['resto_names']
 
 @router.get("/restaurant/form/upload/logo")
 async def logo_upload_png_form(req: Request, user: str = Depends(get_current_user) ):

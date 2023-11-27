@@ -19,8 +19,7 @@ def verify_password(plain_password, hashed_password):
 
 def authenticate(username, password, account:Login):
     try:
-        password_check = verify_password(password, account.passphrase)
-        return password_check
+        return verify_password(password, account.passphrase)
     except Exception as e:
         print(e)
         return False
@@ -28,7 +27,7 @@ def authenticate(username, password, account:Login):
 def get_current_user(token: str = Depends(oauth2_scheme), sess:Session = Depends(sess_db) ):
     loginrepo = LoginRepository(sess)
     user = loginrepo.get_all_login_username(token)
-    if user == None:
+    if user is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid authentication credentials",

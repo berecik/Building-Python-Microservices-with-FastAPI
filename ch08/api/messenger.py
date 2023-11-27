@@ -33,7 +33,7 @@ def json_date_serializer(obj):
 
     if isinstance(obj, (datetime, date)):
         return obj.isoformat()
-    raise TypeError ("Data %s not serializable" % type(obj))
+    raise TypeError(f"Data {type(obj)} not serializable")
 
 def date_hook_deserializer(json_dict):
     for (key, value) in json_dict.items():
@@ -59,7 +59,12 @@ async def add_messenger(req: MessengerReq):
 @router.post("/messenger/kafka/send")
 async def send_messnger_details(req: MessengerReq): 
     messenger_dict = req.dict(exclude_unset=True)
-    producer.send("newstopic", bytes(str(json.dumps(messenger_dict, default=json_date_serializer)), 'utf-8')) 
+    producer.send(
+        "newstopic",
+        bytes(
+            json.dumps(messenger_dict, default=json_date_serializer), 'utf-8'
+        ),
+    )
     return {"content": "messenger details sent"} 
 
 @router.get('/messenger/sse/add')
@@ -71,11 +76,11 @@ async def send_message_stream(request: Request):
                 break
 
             message = consumer.poll()
-            if not len(message.items()) == 0:
+            if len(message.items()) != 0:
                 for tp, records in message.items():
                     for rec in records:
                         messenger_dict = json.loads(rec.value.decode('utf-8'), object_hook=date_hook_deserializer )
-                                             
+
                         repo = MessengerRepository()
                         result = await repo.insert_messenger(messenger_dict)
                         id = uuid4()
@@ -85,7 +90,7 @@ async def send_message_stream(request: Request):
                             "retry": SSE_RETRY_TIMEOUT,
                             "data": rec.value.decode('utf-8')
                         }
-            
+
             await asyncio.sleep(SSE_STREAM_DELAY)
 
     return EventSourceResponse(event_provider())

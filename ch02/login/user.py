@@ -39,7 +39,13 @@ def signup(signup: Signup):
     try:
         userid = uuid1()
         login = User(id=userid, username=signup.username, password=signup.password)
-        tourist = Tourist(id=userid, login=login, date_signed=datetime.now(), booked=0, tours=list() )
+        tourist = Tourist(
+            id=userid,
+            login=login,
+            date_signed=datetime.now(),
+            booked=0,
+            tours=[],
+        )
         tourist_json = jsonable_encoder(tourist)
         pending_users[userid] = tourist_json
         return JSONResponse(content=tourist_json, status_code=status.HTTP_201_CREATED)
@@ -57,11 +63,10 @@ def login(login: User, bg_task:BackgroundTasks):
     
 @router.get("/ch02/user/login/{username}/{password}")
 def login(username:str, password: str, bg_task:BackgroundTasks):
-     tourist_list = [ tourist for tourist in approved_users.values() if tourist['login']['username'] == username and tourist['login']['password'] == password] 
-     if len(tourist_list) == 0 or tourist_list == None:
+    tourist_list = [ tourist for tourist in approved_users.values() if tourist['login']['username'] == username and tourist['login']['password'] == password]
+    if not tourist_list or tourist_list is None:
         return JSONResponse(content={"message": "invalid operation"}, status_code=status.HTTP_403_FORBIDDEN)
-     else:
-        tourist = tourist_list[0]
-        tour_json = jsonable_encoder(tourist)
-        bg_task.add_task(audit_log_transaction, touristId=str(tourist['login']['id']), message="login")
-        return JSONResponse(content=tour_json, status_code=status.HTTP_200_OK)
+    tourist = tourist_list[0]
+    tour_json = jsonable_encoder(tourist)
+    bg_task.add_task(audit_log_transaction, touristId=str(tourist['login']['id']), message="login")
+    return JSONResponse(content=tour_json, status_code=status.HTTP_200_OK)

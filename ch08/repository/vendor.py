@@ -41,11 +41,13 @@ class VendorLoginRepository:
         
     async def join_login_vendor(self):
         query = Vendor.join(Login).select()
-        result = await query.gino.load(Vendor.distinct(Vendor.id).load(parent=Login)).all()
-        return result 
+        return await query.gino.load(
+            Vendor.distinct(Vendor.id).load(parent=Login)
+        ).all() 
     
     async def join_vendor_login(self):
         query = Vendor.join(Login).select()
-        result = await query.gino.load(Login.distinct(Login.id).load(add_child=Vendor)).all()
-        return result 
+        return await query.gino.load(
+            Login.distinct(Login.id).load(add_child=Vendor)
+        ).all() 
 

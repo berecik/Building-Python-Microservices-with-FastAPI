@@ -32,18 +32,17 @@ async def add_subscription(req: SubscriptionReq):
 async def list_all_subscriptions():
     repo = SubscriptionRepository()
     result = await repo.get_all_subscription();
-    result_map = [u.to_dict() for u in result]
-    return result_map
+    return [u.to_dict() for u in result]
 
 @router.post("/subscription/dated")
 async def list_dated_subscription(min_date:date, max_date:date):
      
     loop = asyncio.get_event_loop()
     observable = await fetch_subscription(min_date, max_date, loop)
-    
+
     observable.subscribe(
-       on_next=lambda item: print("Subscription details: {}.".format(item)),
-       scheduler=AsyncIOScheduler(loop)
+        on_next=lambda item: print(f"Subscription details: {item}."),
+        scheduler=AsyncIOScheduler(loop),
     )
     
 @router.get("/subscription/monitor/total")
@@ -51,9 +50,9 @@ async def list_all_customer_subscription():
    
     loop = asyncio.get_event_loop()
     observable = fetch_records(5, loop)
-    
+
     observable.subscribe(
-       on_next=lambda item: print("The total amount sold: {}.".format(item)),
-       scheduler=AsyncIOScheduler(loop)
+        on_next=lambda item: print(f"The total amount sold: {item}."),
+        scheduler=AsyncIOScheduler(loop),
     )
     return {"content": "Background task created."}

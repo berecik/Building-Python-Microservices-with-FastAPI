@@ -16,17 +16,17 @@ class OrderRepository:
         try:
             item = await Cart.get(cart_id)
             order = await Order.get(id)
-           
-            if order.orders == None:
-                order.orders = list()
-                
-            if not item == None:
-                order.orders.append(item)    
+
+            if order.orders is None:
+                order.orders = []
+
+            if item is not None:
+                order.orders.append(item)
             await order.set({Order.orders: order.orders})
-            
+
         except Exception as e:
             print(e)
-            return False 
+            return False
         return True
     
     async def update_order(self, id:int, details:Dict[str, Any]) -> bool: 

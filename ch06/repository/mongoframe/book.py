@@ -41,9 +41,7 @@ class BookRepository:
         return True
     
     def get_all_book(self):
-        books = [b.to_json_type() for b in Book.many()]
-        return books
+        return [b.to_json_type() for b in Book.many()]
     
     def get_book(self, id:int): 
-        book = Book.one(Q.id == id).to_json_type()
-        return book
+        return Book.one(Q.id == id).to_json_type()

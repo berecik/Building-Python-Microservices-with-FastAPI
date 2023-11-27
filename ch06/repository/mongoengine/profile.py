@@ -65,8 +65,12 @@ class UserProfileRepository():
     
     def get_all_profile(self):
         profiles = Login.objects.filter(profile__login_id__exists=True)
-        profiles_dict = list(map(lambda h: h.profile.to_json(), Login.objects().filter(profile__login_id__exists=True)))
-        return profiles_dict
+        return list(
+            map(
+                lambda h: h.profile.to_json(),
+                Login.objects().filter(profile__login_id__exists=True),
+            )
+        )
     
     def get_profile(self, login_id:int): 
         login = Login.objects(id=login_id).get()

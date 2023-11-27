@@ -27,30 +27,26 @@ def add_auction(req: AuctionsReq, credentials: HTTPBasicCredentials = Depends(ht
 def update_auction(id:int, req: AuctionsReq, credentials: HTTPBasicCredentials = Depends(http_basic), sess:Session = Depends(sess_db)): 
     auc_dict = req.dict(exclude_unset=True)
     repo:AuctionsRepository = AuctionsRepository(sess)
-    result = repo.update_auction(id, auc_dict )
-    if result: 
+    if result := repo.update_auction(id, auc_dict):
         return JSONResponse(content={'message':'auction updated successfully'}, status_code=201)
-    else: 
+    else:
         return JSONResponse(content={'message':'update auction error'}, status_code=500)
 
 @router.delete("/auctions/delete/{id}")
 def delete_auction(id:int, credentials: HTTPBasicCredentials = Depends(http_basic), sess:Session = Depends(sess_db)): 
     repo:AuctionsRepository = AuctionsRepository(sess)
-    result = repo.delete_auction(id )
-    if result: 
+    if result := repo.delete_auction(id):
         return JSONResponse(content={'message':'auction updated successfully'}, status_code=201)
-    else: 
+    else:
         return JSONResponse(content={'message':'update auction error'}, status_code=500)
 
 
 @router.get("/auctions/list")
 def list_all_auction(credentials: HTTPBasicCredentials = Depends(http_basic), sess:Session = Depends(sess_db)): 
     repo:AuctionsRepository = AuctionsRepository(sess)
-    result = repo.get_all_auctions()
-    return result 
+    return repo.get_all_auctions() 
 
 @router.get("/auctions/{id}")
 def get_auction(id:int, credentials: HTTPBasicCredentials = Depends(http_basic), sess:Session = Depends(sess_db)): 
     repo:AuctionsRepository = AuctionsRepository(sess)
-    result = repo.get_auction(id)
-    return result 
+    return repo.get_auction(id) 

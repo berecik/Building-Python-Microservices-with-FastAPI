@@ -134,7 +134,7 @@ async def update_node_admin(id:int, node_req_atts: ProfileReq):
 
 @router.get("/neo4j/nodes/all")
 async def list_all_nodes():
-    query = f"""
+    query = """
         MATCH (node)
         RETURN node"""
     try:

@@ -30,8 +30,7 @@ class LoginRepository:
     
     def get_all_login(self):
         login = Login.objects()
-        login_list = [l.to_json() for l in login]
-        return login_list
+        return [l.to_json() for l in login]
     
     def get_login(self, id:int): 
         login = Login.objects(id=id).get()

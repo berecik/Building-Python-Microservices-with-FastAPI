@@ -26,19 +26,17 @@ templates = Jinja2Templates(directory="templates")
 
 class JSONEncoder(JSONEncoder):
     def default(self, o):
-        if isinstance(o, ObjectId):
-            return str(o)
-        return JSONEncoder.default(self, o)
+        return str(o) if isinstance(o, ObjectId) else JSONEncoder.default(self, o)
 
 @router.post("/login/authenticate")
 async def authenticate(response: Response, username:str = Query(..., description='The username of the credentials.', max_length=50) , password: 
     str = Query(..., description='The password of the of the credentials.', max_length=20) , engine=Depends(create_db_engine)):
     repo:LoginRepository = LoginRepository(engine)
     login = await repo.get_login_credentials(username, password)
-    if login == None:
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN, detail="Invalid authentication"
-            )
+    if login is None:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, detail="Invalid authentication"
+        )
     token = jwt.encode({"sub": username}, secret_key)
     response.set_cookie("session", token)
     return {"username": username}

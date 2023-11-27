@@ -28,15 +28,13 @@ async def create_respondent_report_xlsx():
     worksheet.write(0, 3, 'Age')
     worksheet.write(0, 4, 'Gender')
     worksheet.write(0, 5, 'Married?')
-    row = 1
-    for respondent in result:
+    for row, respondent in enumerate(result, start=1):
         worksheet.write(row, 0, respondent["id"])
         worksheet.write(row, 1, respondent["fname"])
         worksheet.write(row, 2, respondent["lname"])
         worksheet.write(row, 3, respondent["age"])
         worksheet.write(row, 4, respondent["gender"])
         worksheet.write(row, 5, respondent["marital"])
-        row += 1
     workbook.close()
     output.seek(0)
 

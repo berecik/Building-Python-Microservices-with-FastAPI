@@ -23,7 +23,7 @@ async def get_respondent_answers(qid:int):
     data = []
     for loc in locations:
         loc_q = await repo_answers.get_answers_per_q(loc["id"], qid)
-        if not len(loc_q) == 0:
+        if len(loc_q) != 0:
             loc_data = [ weights[qid-1][str(item["answer_choice"])] for item in loc_q]
             data.append(loc_data)
     arr = np.array(data)
@@ -37,7 +37,7 @@ async def answers_weight_multiply(gradient:int, qid:int):
     data = []
     for loc in locations:
         loc_q = await repo_answers.get_answers_per_q(loc["id"], qid)
-        if not len(loc_q) == 0:
+        if len(loc_q) != 0:
             loc_data = [ weights[qid-1][str(item["answer_choice"])] for item in loc_q]
             data.append(loc_data)
     arr = np.array(list(itertools.chain(*data)))

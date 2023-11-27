@@ -17,7 +17,7 @@ router.add_event_handler("shutdown", disconnect_db_client)
 def json_serial(obj):
     if isinstance(obj, (datetime, date)):
         return obj.strftime('%Y-%m-%dT%H:%M:%S.%f')
-    raise TypeError ("The type %s not serializable." % type(obj))
+    raise TypeError(f"The type {type(obj)} not serializable.")
 
 @router.post("/book/create")
 def create_book(req:BookReq): 

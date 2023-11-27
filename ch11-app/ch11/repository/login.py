@@ -10,15 +10,15 @@ class LoginRepository:
     
     async def insert_login(self, details:Dict[str, Any]) -> bool: 
         try:
-           user = await self.users.find_one({"username": details["username"]})
-           if not user == None:
-               return False
-           else: 
-               await self.users.insert_one(details)
-                  
+            user = await self.users.find_one({"username": details["username"]})
+            if user is not None:
+                return False
+            else: 
+                await self.users.insert_one(details)
+
         except Exception as e:
             print(e)
-            return False 
+            return False
         return True
     
     async def update_password(self, username:str, password:str): 

@@ -10,5 +10,4 @@ class AddTrainerCommandHandler(ICommandHandler):
         self.repo:TrainerRepository = TrainerRepository()
         
     async def handle(self, command:ProfileTrainerCommand) -> bool:
-        result = await self.repo.insert_trainer(command.details)
-        return result
+        return await self.repo.insert_trainer(command.details)

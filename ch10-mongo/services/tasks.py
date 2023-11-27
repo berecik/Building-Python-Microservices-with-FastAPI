@@ -44,14 +44,11 @@ def filter_unsatisfactory(self, results:Dict[str, int]):
 
 @celery.task(bind=True)
 def sort_asc_result(self, results:Dict[str, int]):
-   new_results = dict(sorted(results.items(), key=lambda item: item[1]))
-   return new_results
+    return dict(sorted(results.items(), key=lambda item: item[1]))
 
 @celery.task(bind=True)
 def compute_sum_results(self, results:Dict[str, int]):
-    scores = []
-    for key, val in results.items():
-        scores.append(val)
+    scores = list(results.values())
     print(scores)
     return sum(scores)
 
@@ -61,18 +58,15 @@ def compute_avg_results(self, value, len):
 
 @celery.task(bind=True)
 def derive_percentile(self, avg):
-    percentage = f"{avg:.0%}"
-    return percentage
+    return f"{avg:.0%}"
 
 @celery.task(bind=True)
 def save_result_csv(self, results: Dict[str, int]):
     try:
-        file = os.getcwd() + '/files/survey.csv'
+        file = f'{os.getcwd()}/files/survey.csv'
         questions = [ "q1", "q2", "q3"]
         answers = [20, 30, 40]
-        data = {}
-        data["Questions"] = questions
-        data["Answers"] = answers
+        data = {"Questions": questions, "Answers": answers}
         df = pd.DataFrame(data=data, columns=['Questions', 'Answers'])
         df.to_csv (file)
         return True
@@ -82,12 +76,10 @@ def save_result_csv(self, results: Dict[str, int]):
 @celery.task(bind=True)
 def save_result_xlsx(self, results: Dict[str, int]):
     try:
-        file = os.getcwd() + '/files/survey.xlsx'
+        file = f'{os.getcwd()}/files/survey.xlsx'
         questions = [ "q1", "q2", "q3"]
         answers = [20, 30, 40]
-        data = {}
-        data["Questions"] = questions
-        data["Answers"] = answers
+        data = {"Questions": questions, "Answers": answers}
         df = pd.DataFrame(data=data, columns=['Questions', 'Answers'])
         df.to_excel (file, index = False, header=True)
         return True
@@ -96,10 +88,7 @@ def save_result_xlsx(self, results: Dict[str, int]):
 
 @celery.task
 def add_weights_callback(results, weight):
-    new_results = {}
-    for key, val in results.items():
-        new_results[key] = val + weight
-    return new_results
+    return {key: val + weight for key, val in results.items()}
 
 @celery.task
 def multiply_callback(data):

@@ -40,8 +40,7 @@ class MemberRepository:
     def get_all_member(self):
         with db_session:
             members = Profile_Members.select()
-            result = [ProfileMembersReq.from_orm(m) for m in members]
-            return result
+            return [ProfileMembersReq.from_orm(m) for m in members]
     
     def get_member(self, id:int): 
         with db_session:
@@ -54,9 +53,7 @@ class MemberRepository:
 class MemberGymClassRepository:
     
     def join_member_class(self): 
-      with db_session: 
-        generator_args = (m for m in Profile_Members for g in m.gclass)
-        joins = left_join(generator_args)
-        result = [ProfileMembersReq.from_orm(m) for m in joins ]
-    
-        return result
+        with db_session: 
+            generator_args = (m for m in Profile_Members for g in m.gclass)
+            joins = left_join(generator_args)
+            return [ProfileMembersReq.from_orm(m) for m in joins ]

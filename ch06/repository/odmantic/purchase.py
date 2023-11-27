@@ -38,9 +38,7 @@ class PurchaseRepository:
         return True
     
     async def get_all_purchase(self):
-        purchases = await self.engine.find(Purchase)
-        return purchases
+        return await self.engine.find(Purchase)
             
     async def get_purchase(self, id:int): 
-        purchase = await self.engine.find_one(Purchase, Purchase.purchase_id == id) 
-        return purchase
+        return await self.engine.find_one(Purchase, Purchase.purchase_id == id)

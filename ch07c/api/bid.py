@@ -26,30 +26,26 @@ def add_bid(req: BidsReq, current_user: Login = Depends(get_current_user), sess:
 def update_bid(id:int, req: BidsReq, current_user: Login = Depends(get_current_user), sess:Session = Depends(sess_db)): 
     bid_dict = req.dict(exclude_unset=True)
     repo:BidsRepository = BidsRepository(sess)
-    result = repo.update_bid(id, bid_dict )
-    if result: 
+    if result := repo.update_bid(id, bid_dict):
         return JSONResponse(content={'message':'bid updated successfully'}, status_code=201)
-    else: 
+    else:
         return JSONResponse(content={'message':'update bid error'}, status_code=500)
 
 
 @router.delete("/bid/delete/{id}")
 def delete_bid(id:int, current_user: Login = Depends(get_current_user), sess:Session = Depends(sess_db)): 
     repo:BidsRepository = BidsRepository(sess)
-    result = repo.delete_bid(id )
-    if result: 
+    if result := repo.delete_bid(id):
         return JSONResponse(content={'message':'auction updated successfully'}, status_code=201)
-    else: 
+    else:
         return JSONResponse(content={'message':'update auction error'}, status_code=500)
 
 @router.get("/bid/all")
 def list_all_bid(current_user: Login = Depends(get_current_user), sess:Session = Depends(sess_db)): 
     repo:BidsRepository = BidsRepository(sess)
-    result = repo.get_all_bids()
-    return result  
+    return repo.get_all_bids()  
 
 @router.post("/bid/{id}")
 def get_bid(id:int, current_user: Login = Depends(get_current_user), sess:Session = Depends(sess_db)): 
     repo:BidsRepository = BidsRepository(sess)
-    result = repo.get_bid(id)
-    return result  
+    return repo.get_bid(id)  

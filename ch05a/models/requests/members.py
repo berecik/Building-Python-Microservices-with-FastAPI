@@ -29,19 +29,12 @@ class ProfileMembersReq(BaseModel):
 
     @validator('trainer_id', pre=True, allow_reuse=True, check_fields=False)
     def trainer_object_to_int(cls, values):
-        if isinstance(values, int):
-            return values
-        else:
-            return values.id.id
+        return values if isinstance(values, int) else values.id.id
     
     @validator('id', pre=True, allow_reuse=True, check_fields=False)
     def member_id_to_int(cls, values):
         
-        if isinstance(values, int):
-            return values
-            
-        else:
-            return values.id
+        return values if isinstance(values, int) else values.id
     
     class Config:
         orm_mode = True

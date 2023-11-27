@@ -8,15 +8,15 @@ class DbSessionRepository:
         
     async def insert_session(self, details:Dict[str, Any]) -> bool: 
         try:
-           exist_sess = await self.engine.find_one(DbSession, DbSession.session_name == details['session_name']) 
-           if exist_sess == None:
+            exist_sess = await self.engine.find_one(DbSession, DbSession.session_name == details['session_name'])
+            if exist_sess is None:
                 session = DbSession(**details)
                 print(session)
                 await self.engine.save(session)
-                  
+
         except Exception as e:
             print(e)
-            return False 
+            return False
         return True
     
    
@@ -29,9 +29,7 @@ class DbSessionRepository:
         return True
     
     async def get_all_session(self):
-        sessions = await self.engine.find(DbSession)
-        return sessions
+        return await self.engine.find(DbSession)
             
     async def get_session(self, key:str): 
-        session = await self.engine.find_one(DbSession, DbSession.session_key == key) 
-        return session
+        return await self.engine.find_one(DbSession, DbSession.session_key == key)

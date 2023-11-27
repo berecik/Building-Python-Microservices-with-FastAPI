@@ -7,16 +7,13 @@ class BookRequestService:
         self.repo:BookRequestRepository = BookRequestRepository()
         
     def add_book_request(self, book_request:BookRequest): 
-        result = self.repo.insert_request(book_request)
-        return result
+        return self.repo.insert_request(book_request)
     
     def update_book_request(self, req_id:int, book_id:int): 
-        result = self.repo.update_requested_book(req_id, book_id)
-        return result 
+        return self.repo.update_requested_book(req_id, book_id) 
     
     def remove_book_request(self, req_id:int): 
-        result = self.repo.delete_request(req_id)
-        return result 
+        return self.repo.delete_request(req_id) 
     
     def list_book_request(self): 
         return self.repo.get_all_requests()
